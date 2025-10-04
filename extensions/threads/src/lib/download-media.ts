@@ -2,10 +2,20 @@ import axios from "axios";
 import { createWriteStream, existsSync } from "fs";
 import { showToast, Toast } from "@raycast/api";
 
-export async function getThreadsMediaURL(threadsUrl: string) {
+type ThreadsMediaRequestResponse = {
+  data: {
+    post_detail: {
+      media_list: {
+        url: string;
+      }[];
+    };
+  };
+};
+
+export async function getThreadsMediaURL(threadsPostId: string) {
   try {
     const response = await axios.get(
-      `https://api.threadsphotodownloader.com/v2/media?url=${threadsUrl}`,
+      `https://www.dolphinradar.com/api/threads/post_detail/${threadsPostId}`,
       {
         headers: {
           "User-Agent":
@@ -14,13 +24,29 @@ export async function getThreadsMediaURL(threadsUrl: string) {
       },
     );
 
-    const imageUrls = response.data["image_urls"];
-    const videoUrls = response.data["video_urls"];
+    const mediaList = (response.data as ThreadsMediaRequestResponse).data
+      .post_detail.media_list;
 
-    return {
-      images: imageUrls,
-      videos: videoUrls,
-    };
+    if (!mediaList || mediaList.length === 0) {
+      return null;
+    }
+
+    const { images, videos } = mediaList.reduce<{
+      images: string[];
+      videos: string[];
+    }>(
+      (acc, media) => {
+        if (media.url.includes(".jpg")) {
+          acc.images.push(media.url);
+        } else if (media.url.includes(".mp4")) {
+          acc.videos.push(media.url);
+        }
+        return acc;
+      },
+      { images: [], videos: [] },
+    );
+
+    return { images, videos };
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error("Error:", error.message);
