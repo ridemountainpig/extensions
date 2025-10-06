@@ -34,7 +34,7 @@ export default async function Command({
       style: Toast.Style.Animated,
     });
 
-    const threadMedias = await getThreadsMediaURL(match[1]);
+    const threadMedias = await getThreadsMediaURL(threadsUrl, match[1]);
     if (
       !threadMedias ||
       (threadMedias?.images.length === 0 && threadMedias?.videos.length === 0)

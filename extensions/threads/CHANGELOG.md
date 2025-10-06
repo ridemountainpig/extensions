@@ -2,7 +2,7 @@
 
 ## [Update] - {PR_MERGE_DATE}
 
-- Updated the `Download Threads Media` command to download media from Threads.
+- Add a fallback for retrieving media URLs in the `Download Threads Media` command.
 
 ## [Update] - 2025-04-28
 
