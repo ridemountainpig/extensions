@@ -1,6 +1,6 @@
 import axios from "axios";
 import { createWriteStream, existsSync } from "fs";
-import { showToast, Toast } from "@raycast/api";
+import { showToast, Toast, showInFinder } from "@raycast/api";
 
 type ThreadsDolphinRadarResponse = {
   data: {
@@ -137,6 +137,12 @@ export async function handleDownload(
       title: "Download Complete",
       message: `Media saved to ${filePath}`,
       style: Toast.Style.Success,
+      primaryAction: {
+        title: "Show in Finder",
+        onAction: async () => {
+          await showInFinder(filePath);
+        },
+      },
     });
   } catch (error) {
     await showToast({
