@@ -138,7 +138,7 @@ export default function RepositoryActions({
           icon={Icon.Download}
           title="Download with Options"
           target={<DownloadRepositoryForm repository={repository} />}
-          shortcut={{ modifiers: ["cmd"], key: "d" }}
+          shortcut={{ modifiers: ["cmd", "shift"], key: "d" }}
         />
         <Action.OpenInBrowser
           icon={{ source: "vscode.svg", tintColor: Color.PrimaryText }}
