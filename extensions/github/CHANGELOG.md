@@ -1,6 +1,6 @@
 # GitHub Changelog
 
-## [Add Download Repository command and copy markdown URL actions] - {PR_MERGE_DATE}
+## [Add Download Repository command and copy markdown URL actions] - 2025-11-19
 
 - Search Repositories: Added "Download Repository" action to download a repository as a zip file
 - Added "Copy Markdown URL" actions to copy an issue's markdown URL
