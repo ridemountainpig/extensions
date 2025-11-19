@@ -93,6 +93,18 @@ export default function DownloadRepositoryForm({ repository }: DownloadRepositor
         return;
       }
     },
+    validation: {
+      downloadPath: (value) => {
+        if (!value || value.length === 0) {
+          return "Please select a download path";
+        }
+      },
+      branch: (value) => {
+        if (!value || value.trim() === "") {
+          return "Please select a branch";
+        }
+      },
+    },
   });
 
   useEffect(() => {
