@@ -4,7 +4,7 @@ import { exec } from "child_process";
 const sound = "mixkit-happy-crowd-cheer-975.wav";
 const soundPath = `${environment.assetsPath}/${sound}`;
 const macCommand = `afplay "${soundPath}"`;
-const windowsCommand = `powershell -c Add-Type -AssemblyName presentationCore; $player = New-Object system.windows.media.mediaplayer; $player.open('${soundPath}'); $player.Volume = 0.5; $player.Play(); Start-Sleep 1; Start-Sleep -s $player.NaturalDuration.TimeSpan.TotalSeconds;Exit;`;
+const windowsCommand = `powershell -c "Add-Type -AssemblyName presentationCore; $player = New-Object system.windows.media.mediaplayer; $player.open('${soundPath.replace(/'/g, "''")}'); $player.Volume = 0.5; $player.Play(); Start-Sleep 1; Start-Sleep -s $player.NaturalDuration.TimeSpan.TotalSeconds;Exit;"`;
 
 export function Shoot({ playSound }: { playSound: boolean }) {
   if (process.platform === "win32") {
