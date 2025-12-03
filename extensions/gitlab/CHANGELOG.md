@@ -1,6 +1,6 @@
 # GitLab Changelog
 
-## [Show Readme] - {PR_MERGE_DATE}
+## [Show Readme] - 2025-12-03
 
 - Add "Show Readme" action to project list
 
