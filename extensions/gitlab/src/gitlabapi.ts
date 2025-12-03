@@ -946,6 +946,19 @@ export class GitLab {
       message: status.message,
     });
   }
+
+  async getProjectReadme(project: Project): Promise<string> {
+    const filePath = project.readme_url.split("/-/blob/")[1]?.split("/").slice(1).join("/") || "README.md";
+    const fullUrl = `${this.url}/api/v4/projects/${project.id}/repository/files/${encodeURIComponent(filePath)}/raw`;
+
+    logAPI(`send GET request: ${fullUrl}`);
+    const fetcher = this.getFetcher();
+    const response = await fetcher(fullUrl, { method: "GET" });
+    if (!response.ok) {
+      throw new Error(`unexpected response ${response.statusText}`);
+    }
+    return await response.text();
+  }
 }
 
 export function searchData<Type>(
