@@ -948,7 +948,7 @@ export class GitLab {
   }
 
   async getProjectReadme(project: Project): Promise<string> {
-    const filePath = project.readme_url.split("/-/blob/")[1]?.split("/").slice(1).join("/") || "README.md";
+    const filePath = project.readme_url?.split("/-/blob/")[1]?.split("/").slice(1).join("/") || "README.md";
     const fullUrl = `${this.url}/api/v4/projects/${project.id}/repository/files/${encodeURIComponent(filePath)}/raw`;
 
     logAPI(`send GET request: ${fullUrl}`);

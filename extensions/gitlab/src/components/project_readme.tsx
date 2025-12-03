@@ -28,7 +28,7 @@ export function ProjectReadmeDetail(props: { project: Project }) {
   if (error) {
     return (
       <Detail
-        navigationTitle={`README - ${props.project.name}`}
+        navigationTitle={`Readme - ${props.project.name}`}
         markdown={`## ⚠️ Error\n\n${error}`}
         actions={
           <ActionPanel>
