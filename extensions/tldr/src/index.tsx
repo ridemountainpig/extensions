@@ -85,19 +85,17 @@ async function refreshPages() {
     try {
       await execAsync(`unzip -q "${tempZipPath}" -d "${tempExtractPath}"`);
     } catch {
-      await showFailureToast("Failed to extract archive: unzip command failed. Please ensure unzip is installed.", {
-        title: "Unzip Failed",
-      });
-      return;
+      throw new Error("Failed to extract archive: unzip command failed. Please ensure unzip is installed.");
     }
 
     const pagesPath = resolve(tempExtractPath, "tldr-main", "pages");
     await fs.promises.rename(pagesPath, CACHE_DIR);
+    await showToast(Toast.Style.Success, "TLDR pages fetched!");
+  } catch (error) {
+    await showFailureToast(error, { title: "Download Failed" });
+  } finally {
     await rm(tempZipPath, { force: true });
     await rm(tempExtractPath, { recursive: true, force: true });
-    await showToast(Toast.Style.Success, "TLDR pages fetched!");
-  } catch {
-    await showFailureToast("Please check your internet connexion.", { title: "Download Failed" });
   }
 }
 
