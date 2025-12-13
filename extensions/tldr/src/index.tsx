@@ -9,6 +9,7 @@ import {
   showToast,
   Toast,
 } from "@raycast/api";
+import { showFailureToast } from "@raycast/utils";
 import { exec } from "child_process";
 import fs, { existsSync, readdirSync } from "fs";
 import { rm } from "fs/promises";
@@ -16,7 +17,7 @@ import { globby } from "globby";
 import https from "https";
 import { parse, resolve } from "path";
 import { promisify } from "util";
-import { useEffect, useState } from "react";
+import { JSX, useEffect, useState } from "react";
 
 const execAsync = promisify(exec);
 
@@ -81,7 +82,14 @@ async function refreshPages() {
     }
 
     await fs.promises.mkdir(tempExtractPath, { recursive: true });
-    await execAsync(`unzip -q "${tempZipPath}" -d "${tempExtractPath}"`);
+    try {
+      await execAsync(`unzip -q "${tempZipPath}" -d "${tempExtractPath}"`);
+    } catch {
+      await showFailureToast("Failed to extract archive: unzip command failed. Please ensure unzip is installed.", {
+        title: "Unzip Failed",
+      });
+      return;
+    }
 
     const pagesPath = resolve(tempExtractPath, "tldr-main", "pages");
     await fs.promises.rename(pagesPath, CACHE_DIR);
@@ -89,7 +97,7 @@ async function refreshPages() {
     await rm(tempExtractPath, { recursive: true, force: true });
     await showToast(Toast.Style.Success, "TLDR pages fetched!");
   } catch {
-    await showToast(Toast.Style.Failure, "Download Failed!", "Please check your internet connexion.");
+    await showFailureToast("Please check your internet connexion.", { title: "Download Failed" });
   }
 }
 
@@ -107,7 +115,7 @@ async function readPages() {
   );
 }
 
-export default function TLDRList() {
+export default function TLDRList(): JSX.Element {
   const [platforms, setPlatforms] = useState<Record<string, Platform>>();
   const [selectedPlatformName, setSelectedPlatformName] = useState<string>("osx");
 
